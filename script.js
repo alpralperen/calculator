@@ -1,6 +1,7 @@
 let currentNumber = "";
-let operator = null;
-let number = null;
+let operandOperator = null;
+let operandNumber = null;
+let result = null;
 
 const display = document.getElementById("display");
 
@@ -10,8 +11,8 @@ function updateDisplay(number) {
 
 function clearDisplay() {
   currentNumber = "";
-  operator = null;
-  number = null;
+  operandOperator = null;
+  operandNumber = null;
   updateDisplay(currentNumber);
 }
 
@@ -24,31 +25,43 @@ function performOperation(operator) {
   if (currentNumber === "") {
     return;
   } else {
-    switch (operator) {
-      case "add":
-        number += parseInt(currentNumber);
-        currentNumber = "";
-        break;
-      case "subtract":
-        number -= parseInt(currentNumber);
-        currentNumber = "";
-        break;
-      case "multiply":
-        number *= parseInt(currentNumber);
-        currentNumber = "";
-        break;
-      case "divide":
-        number /= parseInt(currentNumber);
-        currentNumber = "";
-        break;
-      default:
-        break;
-    }
+    operandOperator = operator;
+    operandNumber = parseInt(currentNumber);
+    currentNumber = "";
     updateDisplay(currentNumber);
   }
 }
 
-function calculateResult() {
-  let calculateResult = parseInt(number) + parseInt(currentNumber);
-  updateDisplay(calculateResult);
+function calculate() {
+  if (operandOperator === null || currentNumber === "") {
+    return;
+  }
+
+  let currentNum = parseInt(currentNumber);
+
+  switch (operandOperator) {
+    case "add":
+      result = operandNumber + currentNum;
+      break;
+    case "subtract":
+      result = operandNumber - currentNum;
+      break;
+    case "multiply":
+      result = operandNumber * currentNum;
+      break;
+    case "divide":
+      if (currentNum === 0) {
+        alert("Cannot divide by zero");
+        clearDisplay();
+        return;
+      }
+      result = operandNumber / currentNum;
+      break;
+    default:
+      return;
+  }
+  updateDisplay(result);
+  currentNumber = result.toString();
+  operandOperator = null;
+  operandNumber = null;
 }
